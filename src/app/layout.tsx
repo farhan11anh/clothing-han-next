@@ -1,19 +1,20 @@
+// app/layout.tsx
+"use client"
+
+import { ThemeProvider } from "next-themes"
 import { Inter } from "next/font/google"
 import { Providers } from "./providers"
 import "./globals.css"
 
 const inter = Inter({ subsets: ["latin"] })
 
-export const metadata = {
-  title: "Manajemen Toko",
-  description: "Aplikasi toko dengan Next.js + Shadcn + Redux",
-}
-
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <Providers>{children}</Providers>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <Providers>{children}</Providers>
+        </ThemeProvider>
       </body>
     </html>
   )

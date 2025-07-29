@@ -15,6 +15,13 @@ import {
   LogOut,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
+import DarkModeToggle from "./DarkModeToggle"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 const navItems = [
   { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
@@ -84,21 +91,31 @@ export default function AdminSidebar() {
         </nav>
       </div>
 
-      <div className="flex items-center gap-3 p-4">
-        <Avatar>
-          <AvatarFallback>{user.username[0].toUpperCase()}</AvatarFallback>
-        </Avatar>
+      <div className="p-4 flex items-center gap-3">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="p-0 h-auto rounded-full">
+              <Avatar>
+                <AvatarFallback>{user.username[0].toUpperCase()}</AvatarFallback>
+              </Avatar>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-56">
+            <div className="px-2 py-1.5">
+              <div className="font-medium">{user.username}</div>
+              <div className="text-xs text-muted-foreground">{user.role}</div>
+            </div>
+            <DropdownMenuItem onClick={handleLogout} className="text-red-600">
+              <LogOut className="mr-2 h-4 w-4" />
+              <span>Logout</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
         {!collapsed && (
-          <div className="flex-1 text-sm">
-            <div className="font-medium">{user.username}</div>
-            <div className="text-xs text-muted-foreground">{user.role}</div>
+          <div className="ml-auto">
+            <DarkModeToggle />
           </div>
-        )}
-        {!collapsed && (
-          <Button variant="destructive" size="sm" onClick={handleLogout}>
-            <LogOut size={14} className="mr-1" />
-            Logout
-          </Button>
         )}
       </div>
     </aside>
