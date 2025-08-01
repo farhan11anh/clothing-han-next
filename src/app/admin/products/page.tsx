@@ -20,6 +20,7 @@ import { ProductInitializer } from "@/components/init/ProductInitializer"
 import { ProductFormModal } from "./ProductFormModal"
 import AdminNavbar from "@/components/AdminSidebar"
 import AdminLayout from "@/components/AdminLayout"
+import { DeleteConfirm } from "@/components/DeleteConfirm"
 
 export default function AdminProductPage() {
   const products = useSelector((state: RootState) => state.product.products)
@@ -28,14 +29,22 @@ export default function AdminProductPage() {
   const [modalOpen, setModalOpen] = useState(false)
   const [editing, setEditing] = useState<Product | null>(null)
 
-  const handleDelete = (id: string) => {
-    if (confirm("Yakin ingin menghapus produk ini?")) {
-      dispatch(deleteProduct(id))
-    }
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [productToDelete, setProductToDelete] = useState<{ id: string, name: string } | null>(null)
+
+  // When delete button is clicked
+  const handleDeleteClick = (product: Product) => {
+    setProductToDelete({ id: product.id, name: product.name })
+    setDeleteDialogOpen(true)
   }
 
   return (
     <AdminLayout>
+      <DeleteConfirm
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        product={productToDelete}
+      />
       <div className=" space-y-4">
         <ProductInitializer />
         <div className="flex justify-between items-center">
@@ -62,7 +71,7 @@ export default function AdminProductPage() {
             {products.map(product => (
               <TableRow key={product.id}>
                 <TableCell>
-                  <img src={product.image} alt={product.name} className="h-14 w-14 object-cover rounded" />
+                  <img src={product.images?.[0]} alt={product.name} className="h-14 w-14 object-cover rounded" />
                 </TableCell>
                 <TableCell>{product.name}</TableCell>
                 <TableCell>Rp {product.price.toLocaleString()}</TableCell>
@@ -74,7 +83,11 @@ export default function AdminProductPage() {
                   }}>
                     Edit
                   </Button>
-                  <Button size="sm" variant="destructive" onClick={() => handleDelete(product.id)}>
+                  <Button
+                    size="sm"
+                    onClick={() => handleDeleteClick(product)}
+                    className="text-white-600 hover:text-white-800 bg-red-600 hover:bg-red-700"
+                  >
                     Hapus
                   </Button>
                 </TableCell>

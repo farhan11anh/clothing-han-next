@@ -1,4 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { promises as fs } from 'fs'
+import path from 'path'
 
 export interface Product {
   id: string
@@ -6,7 +8,7 @@ export interface Product {
   description: string
   price: number
   stock: number
-  image: string
+  images: string[]
 }
 
 interface ProductState {
