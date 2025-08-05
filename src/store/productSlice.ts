@@ -13,10 +13,14 @@ export interface Product {
 
 interface ProductState {
   products: Product[]
+  status: 'idle' | 'loading' | 'succeeded' | 'failed'
+  error: string | null
 }
 
 const initialState: ProductState = {
   products: [],
+  status: 'idle',
+  error: null
 }
 
 const productSlice = createSlice({
